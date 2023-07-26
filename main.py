@@ -1,12 +1,15 @@
 import cv2
 import os
 import subprocess
-from PIL import Image
-from PIL import ImageStat
-from pathlib import Path
 import math
 import time
 import matplotlib.pyplot as plt
+from PIL import Image
+from PIL import ImageStat
+from pathlib import Path
+import functions
+
+
 
 #starting timer to meter how long the process takes
 timer_start = time.time()
@@ -40,11 +43,9 @@ for path in os.scandir(processing_dir):
 print("number of frames: " + str(frame_count))
 
 #making loop for extracting brightness of every frame
-for n in range(frame_count):
-    frame_number = n+1
+for frame_number in range(1, frame_count+1):
     im = Image.open(f"processing/{frame_number}.png")
-    stat = ImageStat.Stat(im)
-    r,g,b = stat.mean
+    r, g, b = ImageStat.Stat(im).mean
     frame_brightness = 100*(math.sqrt(0.241*(r**2) + 0.691*(g**2) + 0.068*(b**2)))
     frame_brightness = round(frame_brightness)
     brightness_array.append(frame_brightness)
