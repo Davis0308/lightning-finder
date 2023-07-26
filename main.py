@@ -42,7 +42,7 @@ print("number of frames: " + str(frame_count))
 #making loop for extracting brightness of every frame
 for n in range(frame_count):
     frame_number = n+1
-    im = Image.open("processing/"+str(frame_number)+".png")
+    im = Image.open(f"processing/{frame_number}.png")
     stat = ImageStat.Stat(im)
     r,g,b = stat.mean
     frame_brightness = 100*(math.sqrt(0.241*(r**2) + 0.691*(g**2) + 0.068*(b**2)))
