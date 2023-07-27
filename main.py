@@ -10,7 +10,6 @@ from pathlib import Path
 import functions
 
 
-
 #starting timer to meter how long the process takes
 timer_start = time.time()
 
@@ -35,7 +34,8 @@ print("\n\n\n" + "fps: " + str(fps))
 #creating final array for brightness values
 brightness_array = []
 
-#counting number of frames in the folder processing and putting it in the variable frame_count
+#counting number of frames in the folder processing and
+#putting it in the variable frame_count
 frame_count = 0
 for path in os.scandir(processing_dir):
     if path.is_file():
