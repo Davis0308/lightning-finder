@@ -16,6 +16,13 @@ timer_start = time.time()
 #defining current working directory
 cwd = Path.cwd()
 
+#checking if processing folder doesn't exist; if it doesn't, create it
+if os.path.exists(cwd / "processing") is False:
+    os.mkdir(cwd / "processing")
+    print("processing folder created")
+else:
+    print("processing folder already exists")
+
 #defining output file for ffmpeg
 ffmpeg_output = cwd / "processing/%d.png"
 
