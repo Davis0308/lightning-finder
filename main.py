@@ -4,10 +4,13 @@ import subprocess
 import math
 import time
 import matplotlib.pyplot as plt
+import shutil
+
+import functions
+
 from PIL import Image
 from PIL import ImageStat
 from pathlib import Path
-import functions
 
 
 #starting timer to meter how long the process takes
@@ -16,18 +19,32 @@ timer_start = time.time()
 #defining current working directory
 cwd = Path.cwd()
 
+#defining processing folder path
+processing_dir_name = "processing"
+processing_dir = cwd / processing_dir_name
+
 #checking if processing folder doesn't exist; if it doesn't, create it
-if os.path.exists(cwd / "processing") is False:
-    os.mkdir(cwd / "processing")
+if os.path.exists(processing_dir) is False:
+    os.mkdir(processing_dir)
     print("processing folder created\n")
 else:
     print("processing folder already exists\n")
 
-#defining output file for ffmpeg
-ffmpeg_output = cwd / "processing/%d.png"
+#checking if processing folder is empty; if not, ask to delete items
+if len(os.listdir(processing_dir)) != 0:
+    proc_empty_input = input("WARNING:\n"
+    "The processing folder is not empty. "
+    "To continue, the contents of the folder need to be deleted. "
+    "Please check that you don't have any important files in the "
+    "folder as they will be removed. "
+    "Would you like to continue?\n(yes/No): ").lower()
+    if proc_empty_input == "yes":
+        functions.clear_dir_only_if_exists(processing_dir, processing_dir_name)
+    else:
+        exit()
 
-#defining processing folder path
-processing_dir = cwd / "processing"
+#defining output file for ffmpeg
+ffmpeg_output = f"{processing_dir}/%d.png"
 
 #running ffmpeg command to split video in frames
 subprocess.run(["ffmpeg","-i","video.mp4",ffmpeg_output])
@@ -72,6 +89,9 @@ print("timestamp data points: " + str(len(timestamp_array)))
 plt.plot(timestamp_array, brightness_array)
 
 #deleting contents of processing folder
+nofipf = len(os.listdir(processing_dir)) #getting number of files in processing folder
+shutil.rmtree(processing_dir)
+print(f"files removed in .\\{processing_dir_name}: {nofipf}")
 
 #ending timer
 timer_end = time.time()
