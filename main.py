@@ -19,9 +19,9 @@ cwd = Path.cwd()
 #checking if processing folder doesn't exist; if it doesn't, create it
 if os.path.exists(cwd / "processing") is False:
     os.mkdir(cwd / "processing")
-    print("processing folder created")
+    print("processing folder created\n")
 else:
-    print("processing folder already exists")
+    print("processing folder already exists\n")
 
 #defining output file for ffmpeg
 ffmpeg_output = cwd / "processing/%d.png"
