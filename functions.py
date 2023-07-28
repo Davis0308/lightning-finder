@@ -23,7 +23,7 @@ def clear_dir_only_if_exists(directory_to_remove, directory_name):
 def get_average_perceived_brightness(processing_dir_name, frame_number):
     im = Image.open(f"{processing_dir_name}/{frame_number}.png")
     r, g, b = ImageStat.Stat(im).mean
-    brightness = 100*(math.sqrt(0.241*(r**2) + 0.691*(g**2) + 0.068*(b**2)))
+    brightness = (math.sqrt(0.241*(r**2) + 0.691*(g**2) + 0.068*(b**2)))
     brightness = round(brightness)
     return(brightness)
 
@@ -48,3 +48,12 @@ def get_rms_grayscale_brightness(processing_dir_name, frame_number):
    im = Image.open(f"{processing_dir_name}/{frame_number}.png").convert('L')
    stat = ImageStat.Stat(im)
    return stat.rms[0]
+
+#5)
+#Average pixels, then transform to equal brightness
+def get_average_equal_brightness(processing_dir_name, frame_number):
+    im = Image.open(f"{processing_dir_name}/{frame_number}.png")
+    r, g, b = ImageStat.Stat(im).mean
+    brightness = (math.sqrt((r**2) + (g**2) + (b**2)))
+    brightness = round(brightness)
+    return(brightness)

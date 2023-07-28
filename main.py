@@ -74,10 +74,11 @@ bf1 = functions.get_average_perceived_brightness
 bf2 = functions.get_average_grayscale_brightness
 bf3 = functions.get_rms_perceived_brightness
 bf4 = functions.get_rms_grayscale_brightness
+bf5 = functions.get_average_equal_brightness
 
 #making loop for extracting brightness of every frame
 for frame_number in range(1, frame_count+1):
-    frame_brightness = bf4(processing_dir_name, frame_number)
+    frame_brightness = bf1(processing_dir_name, frame_number)
     brightness_array.append(frame_brightness)
 
 #creating final array for timestamp values
