@@ -16,7 +16,11 @@ from pathlib import Path
 
 
 #starting timer to meter how long the process takes
-timer_start = time.time()
+timer_start_performance = time.perf_counter()
+timer_start_process = time.process_time()
+
+#Printing script info
+print("lightning-finder by Davis0308 - github.com/Davis0308/lightning-finder - GNU GPL V3\n")
 
 #defining current working directory
 cwd = Path.cwd()
@@ -26,9 +30,10 @@ processing_dir_name = config.settings.proc_dir_name
 processing_dir = cwd / processing_dir_name
 
 #checking if processing folder doesn't exist; if it doesn't, create it
+print("checking for the existance of processing folder...")
 if os.path.exists(processing_dir) is False:
     os.mkdir(processing_dir)
-    print("processing folder created\n")
+    print(f"processing folder named {processing_dir_name} created\n")
 else:
     print("processing folder already exists\n")
 
@@ -76,6 +81,7 @@ bf4 = functions.get_rms_grayscale_brightness
 bf5 = functions.get_average_equal_brightness
 
 #making loop for extracting brightness of every frame
+print("Processing data...")
 for frame_number in range(1, frame_count+1):
     frame_brightness = bf1(processing_dir_name, frame_number)
     brightness_array.append(frame_brightness)
@@ -90,7 +96,7 @@ for n in range(frame_count):
     timestamp_array.append(timestamp_in_s)
 
 #creating plotted graph
-print("\n\nbrightness data points: " + str(len(brightness_array)))
+print("\nbrightness data points: " + str(len(brightness_array)))
 print("timestamp data points: " + str(len(timestamp_array)))
 plt.plot(timestamp_array, brightness_array)
 
@@ -100,11 +106,16 @@ if config.settings.delete_proc_dir_when_done is True:
     shutil.rmtree(processing_dir)
     print(f"files removed in .\\{processing_dir_name}: {nofipf}")
 
-#ending timer
-timer_end = time.time()
-time_elapsed = (timer_end-timer_start)
-time_elapsed = round(time_elapsed, 2)
-print("\n\nFinished." + "\nProcess took " + str(time_elapsed) + " seconds.")
+#ending timers
+timer_end_performance = time.perf_counter()
+time_elapsed_performance = (timer_end_performance-timer_start_performance)
+time_elapsed_performance = round(time_elapsed_performance, 2)
+print(f"\n\nFinished\nScript execution took {str(time_elapsed_performance)} seconds")
+
+timer_end_process = time.process_time()
+time_elapsed_process = (timer_end_process-timer_start_process)
+time_elapsed_process = round(time_elapsed_process, 2)
+print(f"Process took {str(time_elapsed_process)} seconds\n")
 
 #showing plot
 plt.show()
