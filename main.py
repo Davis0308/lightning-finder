@@ -7,10 +7,13 @@ import matplotlib.pyplot as plt
 import shutil
 
 import functions
+import config
 
 from PIL import Image
 from PIL import ImageStat
 from pathlib import Path
+
+# ruff: noqa: E501
 
 
 #starting timer to meter how long the process takes
@@ -20,7 +23,7 @@ timer_start = time.time()
 cwd = Path.cwd()
 
 #defining processing folder path
-processing_dir_name = "processing"
+processing_dir_name = config.settings.proc_dir_name
 processing_dir = cwd / processing_dir_name
 
 #checking if processing folder doesn't exist; if it doesn't, create it
@@ -68,7 +71,7 @@ print("number of frames: " + str(frame_count))
 
 #making loop for extracting brightness of every frame
 for frame_number in range(1, frame_count+1):
-    im = Image.open(f"processing/{frame_number}.png")
+    im = Image.open(f"{processing_dir_name}/{frame_number}.png")
     r, g, b = ImageStat.Stat(im).mean
     frame_brightness = 100*(math.sqrt(0.241*(r**2) + 0.691*(g**2) + 0.068*(b**2)))
     frame_brightness = round(frame_brightness)
@@ -89,9 +92,10 @@ print("timestamp data points: " + str(len(timestamp_array)))
 plt.plot(timestamp_array, brightness_array)
 
 #deleting contents of processing folder
-nofipf = len(os.listdir(processing_dir)) #getting number of files in processing folder
-shutil.rmtree(processing_dir)
-print(f"files removed in .\\{processing_dir_name}: {nofipf}")
+if config.settings.delete_proc_dir_when_done is True:
+    nofipf = len(os.listdir(processing_dir)) #getting number of files in processing folder
+    shutil.rmtree(processing_dir)
+    print(f"files removed in .\\{processing_dir_name}: {nofipf}")
 
 #ending timer
 timer_end = time.time()
