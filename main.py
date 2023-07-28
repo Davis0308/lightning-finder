@@ -1,19 +1,18 @@
+# ruff: noqa: E501
 import cv2
 import os
 import subprocess
-import math
 import time
 import matplotlib.pyplot as plt
 import shutil
+#import math
 
 import functions
 import config
 
-from PIL import Image
-from PIL import ImageStat
 from pathlib import Path
-
-# ruff: noqa: E501
+#from PIL import Image
+#from PIL import ImageStat
 
 
 #starting timer to meter how long the process takes
@@ -97,7 +96,7 @@ plt.plot(timestamp_array, brightness_array)
 
 #deleting contents of processing folder
 if config.settings.delete_proc_dir_when_done is True:
-    nofipf = len(os.listdir(processing_dir)) #getting number of files in processing folder
+    nofipf = len(os.listdir(processing_dir)) #getting num. of files in processing folder
     shutil.rmtree(processing_dir)
     print(f"files removed in .\\{processing_dir_name}: {nofipf}")
 
