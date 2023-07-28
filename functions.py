@@ -2,9 +2,6 @@ import os
 import shutil
 
 
-def test_function(test_parameter):
-    print(f"you wrote: {test_parameter}")
-
 def clear_dir_only_if_exists(directory_to_remove, directory_name):
     if os.path.exists(directory_to_remove) is True:
         shutil.rmtree(directory_to_remove)
