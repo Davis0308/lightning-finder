@@ -50,7 +50,7 @@ if len(os.listdir(processing_dir)) != 0:
 ffmpeg_output = f"{processing_dir}/%d.png"
 
 #running ffmpeg command to split video in frames
-subprocess.run(["ffmpeg","-i","video.mp4",ffmpeg_output])
+subprocess.run(["ffmpeg","-i",config.settings.video_file_name,ffmpeg_output])
 
 #getting video's FPS
 fpsfind = cv2.VideoCapture("video.mp4")
