@@ -69,12 +69,15 @@ for path in os.scandir(processing_dir):
         frame_count += 1
 print("number of frames: " + str(frame_count))
 
+#listing methods for easy switching while testing
+bf1 = functions.get_average_perceived_brightness
+bf2 = functions.get_average_grayscale_brightness
+bf3 = functions.get_rms_perceived_brightness
+bf4 = functions.get_rms_grayscale_brightness
+
 #making loop for extracting brightness of every frame
 for frame_number in range(1, frame_count+1):
-    im = Image.open(f"{processing_dir_name}/{frame_number}.png")
-    r, g, b = ImageStat.Stat(im).mean
-    frame_brightness = 100*(math.sqrt(0.241*(r**2) + 0.691*(g**2) + 0.068*(b**2)))
-    frame_brightness = round(frame_brightness)
+    frame_brightness = bf4(processing_dir_name, frame_number)
     brightness_array.append(frame_brightness)
 
 #creating final array for timestamp values
