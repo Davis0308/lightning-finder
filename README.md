@@ -4,7 +4,7 @@ Eases the finding of lightning in a video file by checking the brightness of eve
 # INSTALLING DEPENDENCIES
 
 - Install required libraries opening a terminal in the folder `.\lightning-finder` and running `pip install -r requirements.txt`
-- Make sure you have ffmpeg installed on your system and it is added to your system PATH
+- Make sure you have ffmpeg installed on your system and that it is added to your system PATH
 
 <sub>Note: This script has been tested on Python 3.11.4</sub>
 
