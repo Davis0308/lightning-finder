@@ -59,9 +59,9 @@ ffmpeg_output = f"{processing_dir}/%d.png"
 
 #running ffmpeg command to split video in frames
 if config.MainSettings.custom_frameres is True:
-    functions.ffmpeg_custom_frameres(ffmpeg_output)
+    functions.ffmpeg_custom_frameres(ffmpeg_output, config.MainSettings.video_file_name, config.MainSettings.custom_frameres)
 else:
-    functions.ffmpeg_normal(ffmpeg_output)
+    functions.ffmpeg_normal(ffmpeg_output, config.MainSettings.video_file_name)
 
 
 #getting video's FPS
@@ -82,19 +82,11 @@ for path in os.scandir(processing_dir):
 print(f"Number of frames: {frame_count}")
 
 #listing methods for easy switching while testing
-bf0 = functions.get_average_perceived_brightness
-bf1 = functions.get_average_grayscale_brightness
-bf2 = functions.get_rms_perceived_brightness
-bf3 = functions.get_rms_grayscale_brightness
-bf4 = functions.get_average_equal_brightness
-bf5 = functions.get_average_perceived_blue_brightness
-bf6 = functions.get_random_test_brightness
-brightness_tuple = (bf0, bf1, bf2, bf3, bf4, bf5, bf6)
 
 #making loop for extracting brightness of every frame
 print(f"Processing data with algorithm n. {config.MainSettings.average_brightness_algorithm}...")
 for frame_number in range(1, frame_count+1):
-    frame_brightness = brightness_tuple[config.MainSettings.average_brightness_algorithm](processing_dir_name, frame_number)
+    frame_brightness = functions.brightness_tuple[config.MainSettings.average_brightness_algorithm](processing_dir_name, frame_number)
     brightness_array.append(frame_brightness)
 
 #creating final array for timestamp values

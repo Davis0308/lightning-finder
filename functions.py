@@ -5,7 +5,6 @@ from PIL import Image
 from PIL import ImageStat
 import math
 import subprocess
-import config
 
 #remove files from a folder only if the folder exists
 def clear_dir_only_if_exists(directory_to_remove, directory_name, current_directory):
@@ -76,13 +75,26 @@ def get_random_test_brightness(processing_dir_name, frame_number):
     brightness = (math.log2(math.sqrt(0.241*(r**5) + 0.1*(g**5)) + 0.391*(b**3)))
     return(brightness)
 
+#declaring function variables
+brightness_function_0 = get_average_perceived_brightness
+brightness_function_1 = get_average_grayscale_brightness
+brightness_function_2 = get_rms_perceived_brightness
+brightness_function_3 = get_rms_grayscale_brightness
+brightness_function_4 = get_average_equal_brightness
+brightness_function_5 = get_average_perceived_blue_brightness
+brightness_function_6 = get_random_test_brightness
+brightness_tuple = (brightness_function_0, brightness_function_1,
+                    brightness_function_2, brightness_function_3,
+                    brightness_function_4, brightness_function_5,
+                    brightness_function_6)
+
 
 #different ffmpeg modes
 
 #normal
-def ffmpeg_normal(ffmpeg_output):
-    subprocess.run(["ffmpeg", "-i", config.MainSettings.video_file_name, ffmpeg_output])
+def ffmpeg_normal(ffmpeg_output, video_file_name):
+    subprocess.run(["ffmpeg", "-i", video_file_name, ffmpeg_output])
 
 #with custom frame resolution
-def ffmpeg_custom_frameres(ffmpeg_output):
-    subprocess.run(["ffmpeg", "-i", config.MainSettings.video_file_name, "-s", config.MainSettings.frame_res, ffmpeg_output])
+def ffmpeg_custom_frameres(ffmpeg_output, video_file_name, custom_resolution):
+    subprocess.run(["ffmpeg", "-i", video_file_name, "-s", custom_resolution, ffmpeg_output])
