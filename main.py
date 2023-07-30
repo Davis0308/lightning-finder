@@ -92,9 +92,9 @@ bf6 = functions.get_random_test_brightness
 brightness_tuple = (bf0, bf1, bf2, bf3, bf4, bf5, bf6)
 
 #making loop for extracting brightness of every frame
-print(f"Processing data with algorithm n. {config.MainSettings.average_brightness_algo}...")
+print(f"Processing data with algorithm n. {config.MainSettings.average_brightness_algorithm}...")
 for frame_number in range(1, frame_count+1):
-    frame_brightness = brightness_tuple[config.MainSettings.average_brightness_algo](processing_dir_name, frame_number)
+    frame_brightness = brightness_tuple[config.MainSettings.average_brightness_algorithm](processing_dir_name, frame_number)
     brightness_array.append(frame_brightness)
 
 #creating final array for timestamp values

@@ -20,7 +20,7 @@ def clear_dir_only_if_exists(directory_to_remove, directory_name, current_direct
         os.mkdir(directory_to_remove)
 
 
-##brightness extraction functions
+##brightness extraction algorithm functions
 
 #0) original, RGB
 #Average pixels, then transform to "perceived brightness"
