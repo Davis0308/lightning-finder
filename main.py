@@ -1,7 +1,7 @@
 # ruff: noqa: E501
 import cv2
 import os
-import subprocess
+#import subprocess
 import time
 import matplotlib.pyplot as plt
 import shutil
@@ -27,11 +27,11 @@ cwd = Path.cwd()
 cwd_name = "lightning-finder"
 
 #defining processing folder path
-processing_dir_name = config.settings.proc_dir_name
+processing_dir_name = config.MainSettings.proc_dir_name
 processing_dir = cwd / processing_dir_name
 
 #defining video file name
-video_file_name = config.settings.video_file_name
+video_file_name = config.MainSettings.video_file_name
 
 #checking if processing folder doesn't exist; if it doesn't, create it
 print("Checking for the existance of processing folder...")
@@ -58,7 +58,11 @@ if len(os.listdir(processing_dir)) != 0:
 ffmpeg_output = f"{processing_dir}/%d.png"
 
 #running ffmpeg command to split video in frames
-subprocess.run(["ffmpeg", "-i", config.settings.video_file_name, ffmpeg_output])
+if config.MainSettings.custom_frameres is True:
+    functions.ffmpeg_custom_frameres(ffmpeg_output)
+else:
+    functions.ffmpeg_normal(ffmpeg_output)
+
 
 #getting video's FPS
 fpsfind = cv2.VideoCapture(video_file_name)
@@ -78,26 +82,32 @@ for path in os.scandir(processing_dir):
 print(f"Number of frames: {frame_count}")
 
 #listing methods for easy switching while testing
-bf1 = functions.get_average_perceived_brightness
-bf2 = functions.get_average_grayscale_brightness
-bf3 = functions.get_rms_perceived_brightness
-bf4 = functions.get_rms_grayscale_brightness
-bf5 = functions.get_average_equal_brightness
+bf0 = functions.get_average_perceived_brightness
+bf1 = functions.get_average_grayscale_brightness
+bf2 = functions.get_rms_perceived_brightness
+bf3 = functions.get_rms_grayscale_brightness
+bf4 = functions.get_average_equal_brightness
+bf5 = functions.get_average_perceived_blue_brightness
+bf6 = functions.get_random_test_brightness
+brightness_tuple = (bf0, bf1, bf2, bf3, bf4, bf5, bf6)
 
 #making loop for extracting brightness of every frame
-print("Processing data...")
+print(f"Processing data with algorithm n. {config.MainSettings.average_brightness_algo}...")
 for frame_number in range(1, frame_count+1):
-    frame_brightness = bf1(processing_dir_name, frame_number)
+    frame_brightness = brightness_tuple[config.MainSettings.average_brightness_algo](processing_dir_name, frame_number)
     brightness_array.append(frame_brightness)
 
 #creating final array for timestamp values
 timestamp_array = []
 
 #making loop for calculating timestamp of every frame
-for n in range(frame_count):
-    timestamp_in_s = n/fps
-    timestamp_in_s = round(timestamp_in_s, 3)
-    timestamp_array.append(timestamp_in_s)
+try:
+    for n in range(frame_count):
+        timestamp_in_s = n/fps
+        timestamp_in_s = round(timestamp_in_s, 3)
+        timestamp_array.append(timestamp_in_s)
+except ZeroDivisionError as zde_error:
+    print(zde_error)
 
 #creating plotted graph
 print(f"\nBrightness data points acquired: {len(brightness_array)}")
@@ -105,7 +115,7 @@ print(f"Timestamp data points acquired: {len(timestamp_array)}")
 plt.plot(timestamp_array, brightness_array)
 
 #deleting contents of processing folder
-if config.settings.delete_proc_dir_when_done is True:
+if config.MainSettings.delete_proc_dir_when_done is True:
     number_of_files_in_processing_folder = len(os.listdir(processing_dir)) #getting num. of files in processing folder
     shutil.rmtree(processing_dir)
     print(f"{number_of_files_in_processing_folder} files removed in .\\{cwd_name}\\{processing_dir_name}")

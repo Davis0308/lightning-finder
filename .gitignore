@@ -2,3 +2,5 @@ testing.py
 *.pyc
 *.mp4
 *.jpg
+*.png
+*.MOV
