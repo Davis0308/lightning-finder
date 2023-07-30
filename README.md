@@ -11,5 +11,5 @@ Eases the finding of lightning in a video file by checking the brightness of eve
 # RUNNING THE SCRIPT
 
 Check config.py before running
-1) Place a video file named "video.mp4" *(name can be changed in config.py)* in the `./lightning finder/` folder
-2) Open a terminal and navigate to the `./lightning finder/` folder, then run `python main.py`
+1) Place a video file named "video.mp4" *(name can be changed in config.py)* in the `.\lightning finder\` folder
+2) Open a terminal and navigate to the `.\lightning finder\` folder, then run `python main.py`
