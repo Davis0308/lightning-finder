@@ -7,3 +7,4 @@ class MainSettings:
     custom_frameres = False #choose if the frames should be rendered at the same resolution as they are in the video (False) or if you'd like to change frame resolution in frame_res (True) [default: False]
     frame_res = "1920x1080" # WidthxHeight [default: 1920x1080]
     average_brightness_algorithm = 2 #choose the brightness algorithm, from 0 to 6 (check functions.py) [default: 2]
+    number_of_lables_in_plot = 25 #choose the number of timestamp ticks/labels on the X axis in the graph [default: 25]

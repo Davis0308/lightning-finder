@@ -3,20 +3,9 @@ import os
 import shutil
 from PIL import Image
 from PIL import ImageStat
+from datetime import timedelta
 import math
 import subprocess
-
-#remove files from a folder only if the folder exists
-def clear_dir_only_if_exists(directory_to_remove, directory_name, current_directory):
-    if os.path.exists(directory_to_remove) is True:
-        print("Deleting...")
-        shutil.rmtree(directory_to_remove)
-        os.mkdir(directory_to_remove)
-        print(f"Contents of the folder .\\{current_directory}\\{directory_name} deleted successfully.\n")
-    else:
-        print(f"The folder .\\{current_directory}\\{directory_name} does not exist anymore. "
-              "Creating it and continuing.\n")
-        os.mkdir(directory_to_remove)
 
 
 ##brightness extraction algorithm functions
@@ -89,7 +78,7 @@ brightness_tuple = (brightness_function_0, brightness_function_1,
                     brightness_function_6)
 
 
-#different ffmpeg modes
+##different ffmpeg modes
 
 #normal
 def ffmpeg_normal(ffmpeg_output, video_file_name):
@@ -98,3 +87,41 @@ def ffmpeg_normal(ffmpeg_output, video_file_name):
 #with custom frame resolution
 def ffmpeg_custom_frameres(ffmpeg_output, video_file_name, custom_resolution):
     subprocess.run(["ffmpeg", "-i", video_file_name, "-s", custom_resolution, ffmpeg_output])
+
+
+#format seconds and milliseconds to hh:mm:ss and hh:mm:ss.msmsms respectively
+def s_to_hh_mm_ss(seconds):
+    td = timedelta(seconds=seconds)
+    hours = td.seconds // 3600
+    minutes = (td.seconds // 60) % 60
+    seconds = td.seconds % 60
+    
+    if hours == 0:
+        return f"{minutes:02}:{seconds:02}"
+    else:
+        return f"{hours}:{minutes:02}:{seconds:02}"
+
+def ms_to_hh_mm_ss_msmsms(milliseconds):
+    td = timedelta(milliseconds=milliseconds)
+    hours = td.seconds // 3600
+    minutes = (td.seconds // 60) % 60
+    seconds = td.seconds % 60
+    milliseconds = td.microseconds // 1000
+    
+    if hours == 0:
+        return f"{minutes:02}:{seconds:02}.{milliseconds:03}"
+    else:
+        return f"{hours}:{minutes:02}:{seconds:02}.{milliseconds:03}"
+    
+
+#remove files from a folder only if the folder exists
+def clear_dir_only_if_exists(directory_to_remove, directory_name, current_directory):
+    if os.path.exists(directory_to_remove) is True:
+        print("Deleting...")
+        shutil.rmtree(directory_to_remove)
+        os.mkdir(directory_to_remove)
+        print(f"Contents of the folder .\\{current_directory}\\{directory_name} deleted successfully.\n")
+    else:
+        print(f"The folder .\\{current_directory}\\{directory_name} does not exist anymore. "
+              "Creating it and continuing.\n")
+        os.mkdir(directory_to_remove)

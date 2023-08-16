@@ -59,7 +59,7 @@ ffmpeg_output = f"{processing_dir}/%d.png"
 
 #running ffmpeg command to split video in frames
 if config.MainSettings.custom_frameres is True:
-    functions.ffmpeg_custom_frameres(ffmpeg_output, config.MainSettings.video_file_name, config.MainSettings.custom_frameres)
+    functions.ffmpeg_custom_frameres(ffmpeg_output, config.MainSettings.video_file_name, config.MainSettings.frame_res)
 else:
     functions.ffmpeg_normal(ffmpeg_output, config.MainSettings.video_file_name)
 
@@ -91,20 +91,37 @@ for frame_number in range(1, frame_count+1):
 
 #creating final array for timestamp values
 timestamp_array = []
+timestamp_array_noms = []
 
-#making loop for calculating timestamp of every frame
+#making loop for calculating timestamp of every frame both in seconds and milliseconds
 try:
     for n in range(frame_count):
         timestamp_in_s = n/fps
         timestamp_in_s = round(timestamp_in_s, 3)
-        timestamp_array.append(timestamp_in_s)
-except ZeroDivisionError as zde_error:
-    print(zde_error)
+        timestamp_in_ms = timestamp_in_s * 1000
+        ms_to_hhmmssmsmsms = functions.ms_to_hh_mm_ss_msmsms(timestamp_in_ms)
+        s_to_hhmmss = functions.s_to_hh_mm_ss(timestamp_in_s)
+        timestamp_array.append(ms_to_hhmmssmsmsms)
+        timestamp_array_noms.append(s_to_hhmmss)
+except ZeroDivisionError as zerodiv_error:
+    print(f"ERROR: {zerodiv_error}")
+    exit()
 
 #creating plotted graph
 print(f"\nBrightness data points acquired: {len(brightness_array)}")
 print(f"Timestamp data points acquired: {len(timestamp_array)}")
-plt.plot(timestamp_array, brightness_array)
+plot = plt.plot(timestamp_array, brightness_array)
+plt.xticks(rotation=45)
+# Calculate the number of desired tick labels
+desired_num_ticks = config.MainSettings.number_of_lables_in_plot
+# Calculate the step size for ticks
+try:
+    step = len(timestamp_array) // desired_num_ticks
+except ZeroDivisionError as zerodiv_error:
+    print(f"ERROR: {zerodiv_error}")
+    exit()
+# Set custom x-axis ticks
+plt.xticks(timestamp_array[::step])
 
 #deleting contents of processing folder
 if config.MainSettings.delete_proc_dir_when_done is True:
