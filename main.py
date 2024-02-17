@@ -112,7 +112,7 @@ print(f"\nBrightness data points acquired: {len(brightness_array)}")
 print(f"Timestamp data points acquired: {len(timestamp_array)}")
 plot = plt.plot(timestamp_array, brightness_array)
 plt.xticks(rotation=45)
-plt.title("Video bririgthness over time")
+plt.title("Video brightness over time")
 plt.xlabel(xlabel="Timestamp", labelpad=5)
 plt.ylabel(ylabel="Brightness", labelpad=10)
 
