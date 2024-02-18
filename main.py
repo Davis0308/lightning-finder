@@ -8,12 +8,16 @@ import shutil
 #import math
 
 import functions
-import config
 
 from pathlib import Path
 #from PIL import Image
 #from PIL import ImageStat
+from configparser import ConfigParser
 
+
+#initializing configparser and defining config file
+configini=ConfigParser(comment_prefixes='', allow_no_value=True)
+configini.read('config.ini')
 
 #starting timer to meter how long the process takes
 timer_start_performance = time.perf_counter()
@@ -27,11 +31,12 @@ cwd = Path.cwd()
 cwd_name = "lightning-finder"
 
 #defining processing folder path
-processing_dir_name = config.MainSettings.proc_dir_name
+processing_dir_name = configini.get("MainSettings","proc_dir_name")
 processing_dir = cwd / processing_dir_name
 
 #defining video file name
-video_file_name = config.MainSettings.video_file_name
+video_file_name = configini.get("MainSettings","video_file_name")
+print(f"Video to process: {video_file_name}")
 
 #checking if processing folder doesn't exist; if it doesn't, create it
 print("Checking for the existance of processing folder...")
@@ -58,10 +63,10 @@ if len(os.listdir(processing_dir)) != 0:
 ffmpeg_output = f"{processing_dir}/%d.png"
 
 #running ffmpeg command to split video in frames
-if config.MainSettings.custom_frameres is True:
-    functions.ffmpeg_custom_frameres(ffmpeg_output, config.MainSettings.video_file_name, config.MainSettings.frame_res)
+if configini.getboolean("MainSettings","custom_frameres") is True:
+    functions.ffmpeg_custom_frameres(ffmpeg_output, video_file_name, configini.get("MainSettings","frame_res"))
 else:
-    functions.ffmpeg_normal(ffmpeg_output, config.MainSettings.video_file_name)
+    functions.ffmpeg_normal(ffmpeg_output, video_file_name)
 
 
 #getting video's FPS
@@ -81,12 +86,12 @@ for path in os.scandir(processing_dir):
         frame_count += 1
 print(f"Number of frames: {frame_count}")
 
-#listing methods for easy switching while testing
 
 #making loop for extracting brightness of every frame
-print(f"Processing data with algorithm n. {config.MainSettings.average_brightness_algorithm}...")
+average_brightness_algorithm = configini.getint("MainSettings","average_brightness_algorithm")
+print(f"Processing data with algorithm n. {average_brightness_algorithm}...")
 for frame_number in range(1, frame_count+1):
-    frame_brightness = functions.brightness_tuple[config.MainSettings.average_brightness_algorithm](processing_dir_name, frame_number)
+    frame_brightness = functions.brightness_tuple[average_brightness_algorithm](processing_dir_name, frame_number)
     brightness_array.append(frame_brightness)
 
 #creating final array for timestamp values
@@ -117,7 +122,7 @@ plt.xlabel(xlabel="Timestamp", labelpad=5)
 plt.ylabel(ylabel="Brightness", labelpad=10)
 
 # Calculate the number of desired tick labels
-desired_num_ticks = config.MainSettings.number_of_lables_in_plot
+desired_num_ticks = configini.getint("MainSettings","number_of_labels_in_plot")
 # Calculate the step size for ticks
 try:
     step = len(timestamp_array) // desired_num_ticks
@@ -128,7 +133,7 @@ except ZeroDivisionError as zerodiv_error:
 plt.xticks(timestamp_array[::step])
 
 #deleting contents of processing folder
-if config.MainSettings.delete_proc_dir_when_done is True:
+if configini.getboolean("MainSettings","delete_proc_dir_when_done") is True:
     number_of_files_in_processing_folder = len(os.listdir(processing_dir)) #getting num. of files in processing folder
     shutil.rmtree(processing_dir)
     print(f"{number_of_files_in_processing_folder} files removed in .\\{cwd_name}\\{processing_dir_name}")
